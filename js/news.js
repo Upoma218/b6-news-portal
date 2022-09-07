@@ -1,12 +1,17 @@
 const loadCategories = async() => {
-    const url = `https://openapi.programming-hero.com/api/news/categories`;
+    try{
+        toggleSpinner(true);
+        const url = `https://openapi.programming-hero.com/api/news/categories`;
     
-    const res = await fetch(url);
-    const data = await res.json();
-    const allData = data.data.news_category;
-    // console.log(allData)
-    setAllMenu(allData);
-    ;
+        const res = await fetch(url);
+        const data = await res.json();
+        const allData = data.data.news_category;
+        // console.log(allData)
+        setAllMenu(allData);
+    }
+    catch(error){
+        console.log(error)
+    }
 
 }
 
@@ -18,23 +23,23 @@ const setAllMenu = (allData) =>{
         const li = document.createElement('li');
         li.innerHTML = `
         <a onclick = "newsCategories('${category.category_id
-        }')" class="nav-link active mx-3 fw-semibold text-secondary" aria-current="page" href="#">${category.category_name}</a>
+        }','${category.category_name}')" class="nav-link active mx-3 fw-semibold text-secondary" aria-current="page" href="#">${category.category_name}</a>
         `;
-        categoryList.appendChild(li);
-
-        
+        categoryList.appendChild(li); 
     }
+    toggleSpinner(false);
 }
 
-const newsCategories = async(_id) => {
+const newsCategories = async(_id = '08',name = 'All News') => {
     // console.log(_id)
+    toggleSpinner(true);
 const url = `https://openapi.programming-hero.com/api/news/category/${_id}`
 
     const res = await fetch(url);
     const data = await res.json();
     console.log(data)
     
-    setNews(data.data);
+    setNews(data.data,name);
     
     
 }
@@ -42,10 +47,15 @@ const url = `https://openapi.programming-hero.com/api/news/category/${_id}`
 
 // console.log(displayNewsDetails)
 
-const setNews = (allNewsData) =>{
+const setNews = (allNewsData, name) =>{
     const displayNewsDetails = document.getElementById('news-card');
+    displayNewsDetails.innerHTML = '';
+    const newsNumber = document.getElementById('news-number');
+    newsNumber.innerHTML = `
+    ${allNewsData.length} news found for category ${name}`
+    list.sort((a, b) => (a.color > b.color) ? 1 : -1)
     for(const category of allNewsData){
-       /*  const newsNumber = category.length; 
+       /*  const newsNumber = data.length; 
            if(newsNumber > 0){
               return newsNumber + 'News found in the Category'
             }
@@ -53,7 +63,8 @@ const setNews = (allNewsData) =>{
              return 'No News found in the Category'
            }  */
         // console.log(category);
-        displayNewsDetails.innerHTML = `
+        const newDiv = document.createElement('div');
+        newDiv.innerHTML = `
         <div class="row g-0">
              <div class="col-md-5">
                 <img src="${category.image_url
@@ -68,16 +79,16 @@ const setNews = (allNewsData) =>{
                    </div>
                  
                   <div class="mt-3 d-flex justify-content-between align-items-center">
-                            <div class = "w-25">
-                               <img src="${category.author.img}" class="img-fluid w-25 rounded-circle me-3" alt="..." >
-                            </div>
-                            <div >
+                          <div class="d-flex">
+                             <img src="${category.author.img}" class=" author-image img-fluid rounded-circle " alt="...">
+                             <div class ="ms-2">
                                <h6 >${category.author ? category.author.name : 'No release date found'}</h6>
                                <h6 class = "text-secondary fs-6">${category.author ? category.author. published_date : 'No release date found'}</h6>
                             </div>
+                          </div> 
                             <h6 > ${category.total_view ? category.total_view : 'No release date found'}</h6>
                         <!-- Button trigger modal -->
-                        <a class="link-primary w-25" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Show details</a>
+                        <a class="link-primary" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Show details</a>
 
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -90,9 +101,9 @@ const setNews = (allNewsData) =>{
                              </div>
                              <div class="modal-body">
                              <img src="${category.author.img}" class="img-fluid" alt="..." >
-                             <h6 >Name: ${category.author ? category.author.name : 'No release date found'}</h6>
+                             <h6 >Name: ${category.author ? category.author.name : 'No name found'}</h6>
                              <h6 class = "fs-6">Publish Date: ${category.author ? category.author. published_date : 'No release date found'}</h6>
-                             <h6 >View: ${category.total_view ? category.total_view : 'No release date found'}</h6>
+                             <h6 >View: ${category.total_view ? category.total_view : 'No view found'}</h6>
                              <p class="card-text text-secondary text-sm">${category.details}</p>
                              <img src="${category.image_url
 
@@ -110,12 +121,23 @@ const setNews = (allNewsData) =>{
            </div>
 
     `;
+    displayNewsDetails.appendChild(newDiv);
     }
-   
+    toggleSpinner(false);
 }
 
-
+const toggleSpinner = isLoading => {
+    const loaderSection = document.getElementById('loader');
+    if(isLoading){
+        loaderSection.classList.remove('d-none')
+    }
+    else{
+        loaderSection.classList.add('d-none')
+    }
+}
 
 loadCategories()
+newsCategories()
+
 
 
