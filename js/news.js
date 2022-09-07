@@ -2,9 +2,9 @@ const loadCategories = async() => {
     try{
         toggleSpinner(true);
         const url = `https://openapi.programming-hero.com/api/news/categories`;
-    
+        let data = {};
         const res = await fetch(url);
-        const data = await res.json();
+        data = await res.json();
         const allData = data.data.news_category;
         // console.log(allData)
         setAllMenu(allData);
@@ -33,13 +33,19 @@ const setAllMenu = (allData) =>{
 const newsCategories = async(_id = '08',name = 'All News') => {
     // console.log(_id)
     toggleSpinner(true);
-const url = `https://openapi.programming-hero.com/api/news/category/${_id}`
-
+try{
+    const url = `https://openapi.programming-hero.com/api/news/category/${_id}`
+    let data = {};
     const res = await fetch(url);
-    const data = await res.json();
+    data = await res.json();
     console.log(data)
     
     setNews(data.data,name);
+}
+catch(error){
+    console.log(error);
+}
+
     
     
 }
