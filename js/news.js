@@ -55,14 +55,14 @@ const modalShow = (news) =>{
     modalContainer.innerHTML = ``;
     modalContainer.innerHTML = `
     
-    <h5 class="modal-title text-info text-center" id="exampleModalLabel">${news.title
+    <h5 class="modal-title text-info " id="exampleModalLabel">${news.title
     }</h5>
-    <p class="card-text text-secondary text-sm">${news.details}</p>
+    <p class="card-text text-secondary text-sm my-4">${news.details}</p>
     <img src="${news.image_url}" class="img-fluid" alt="..." >
-       <h6 >View: ${news.total_view ? news.total_view : 'No view found'}</h6>
-        <img src="${news.author.img}" class="img-fluid w-50 mx-auto" alt="..." >
-        <div><h6 >Name: ${news.author.name ? news.author.name : 'No name found'}</h6>
-        <h6 class = "fs-6">Publish Date: ${news.author.published_date ? news.author. published_date : 'No release date found'}</h6></div>
+       <h6 class = "my-3 text-info" >View: ${news.total_view ? news.total_view : 'No view found'}</h6>
+        <div class ="d-flex"><img src="${news.author.img}" class="img-fluid w-25 me-4" alt="..." >
+        <div class ="my-4"><h6 >Name: ${news.author.name ? news.author.name : 'No name found'}</h6>
+        <h6 class = "fs-6">Publish Date: ${news.author.published_date ? news.author. published_date : 'No release date found'}</h6></div></div>
 `
 toggleSpinner(false);
 }
@@ -115,9 +115,9 @@ const setNews = (allNewsData, name) =>{
              </div>
              <div class="col-md-7 ">
                 <div class="card-body">
-                   <div><h5 class="card-title fw-bold">${category.title
+                   <div><h5 class="card-title fw-bold text-info">${category.title
                    }</h5>
-                   <p class="card-text text-secondary text-sm mt-4">${category.details.slice(0,250) + ' . . .'}</p>
+                   <p class="card-text text-secondary text-sm mt-4">${category.details.slice(0,250) }${category.details.length > 250 ?  ' . . .': ''}</p>
                    </div>
                  
                   <div class="mt-3 d-flex justify-content-between align-items-center">
