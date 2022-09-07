@@ -53,7 +53,8 @@ const setNews = (allNewsData, name) =>{
     const newsNumber = document.getElementById('news-number');
     newsNumber.innerHTML = `
     ${allNewsData.length} news found for category ${name}`
-    list.sort((a, b) => (a.color > b.color) ? 1 : -1)
+    
+    allNewsData.sort((a, b) => (a.total_view < b.total_view) ? 1 : -1)
     for(const category of allNewsData){
        /*  const newsNumber = data.length; 
            if(newsNumber > 0){
@@ -82,11 +83,11 @@ const setNews = (allNewsData, name) =>{
                           <div class="d-flex">
                              <img src="${category.author.img}" class=" author-image img-fluid rounded-circle " alt="...">
                              <div class ="ms-2">
-                               <h6 >${category.author ? category.author.name : 'No release date found'}</h6>
-                               <h6 class = "text-secondary fs-6">${category.author ? category.author. published_date : 'No release date found'}</h6>
+                               <h6 >${category.author.name ? category.author.name : 'No name found'}</h6>
+                               <h6 class = "text-secondary fs-6">${category.author.published_date ? category.author.published_date : 'No release date found'}</h6>
                             </div>
                           </div> 
-                            <h6 > ${category.total_view ? category.total_view : 'No release date found'}</h6>
+                            <h6 > ${category.total_view ? category.total_view : 'No view found'}</h6>
                         <!-- Button trigger modal -->
                         <a class="link-primary" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Show details</a>
 
@@ -101,8 +102,8 @@ const setNews = (allNewsData, name) =>{
                              </div>
                              <div class="modal-body">
                              <img src="${category.author.img}" class="img-fluid" alt="..." >
-                             <h6 >Name: ${category.author ? category.author.name : 'No name found'}</h6>
-                             <h6 class = "fs-6">Publish Date: ${category.author ? category.author. published_date : 'No release date found'}</h6>
+                             <h6 >Name: ${category.author.name ? category.author.name : 'No name found'}</h6>
+                             <h6 class = "fs-6">Publish Date: ${category.author.published_date ? category.author. published_date : 'No release date found'}</h6>
                              <h6 >View: ${category.total_view ? category.total_view : 'No view found'}</h6>
                              <p class="card-text text-secondary text-sm">${category.details}</p>
                              <img src="${category.image_url
