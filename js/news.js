@@ -38,7 +38,7 @@ try{
     let data = {};
     const res = await fetch(url);
     data = await res.json();
-    console.log(data)
+    // console.log(data)
     
     setNews(data.data,name);
 }
@@ -50,8 +50,43 @@ catch(error){
     
 }
 // newsCategories();
-
+const modalShow = (news) =>{
+    const modalContainer = document.getElementById('news-info');
+    modalContainer.innerHTML = ``;
+    modalContainer.innerHTML = `
+    
+    <h5 class="modal-title text-info text-center" id="exampleModalLabel">${news.title
+    }</h5>
+    <p class="card-text text-secondary text-sm">${news.details}</p>
+    <img src="${news.image_url}" class="img-fluid" alt="..." >
+       <h6 >View: ${news.total_view ? news.total_view : 'No view found'}</h6>
+        <img src="${news.author.img}" class="img-fluid w-50 mx-auto" alt="..." >
+        <div><h6 >Name: ${news.author.name ? news.author.name : 'No name found'}</h6>
+        <h6 class = "fs-6">Publish Date: ${news.author.published_date ? news.author. published_date : 'No release date found'}</h6></div>
+`
+toggleSpinner(false);
+}
 // console.log(displayNewsDetails)
+const modalInfo = async(id) =>{
+    
+    try{
+        toggleSpinner(true);
+        const url = `https://openapi.programming-hero.com/api/news/${id}`;
+        let data = {};
+        const res = await fetch(url);
+        data = await res.json();
+        console.log(data)
+        const news = data.data[0];
+        modalShow(news);
+      
+    }
+    catch(error){
+        console.log(error)
+    }
+    
+
+}
+
 
 const setNews = (allNewsData, name) =>{
     const displayNewsDetails = document.getElementById('news-card');
@@ -72,17 +107,17 @@ const setNews = (allNewsData, name) =>{
         // console.log(category);
         const newDiv = document.createElement('div');
         newDiv.innerHTML = `
-        <div class="row g-0">
+        <div class="row g-0 my-3 border border-3 rounded p-3">
              <div class="col-md-5">
                 <img src="${category.image_url
 
-                }" class="img-fluid rounded p-3" alt="...">
+                }" class="img-fluid rounded pe-4" alt="...">
              </div>
-             <div class="col-md-7">
+             <div class="col-md-7 ">
                 <div class="card-body">
                    <div><h5 class="card-title fw-bold">${category.title
                    }</h5>
-                   <p class="card-text text-secondary text-sm">${category.details.slice(0,250) + ' . . .'}</p>
+                   <p class="card-text text-secondary text-sm mt-4">${category.details.slice(0,250) + ' . . .'}</p>
                    </div>
                  
                   <div class="mt-3 d-flex justify-content-between align-items-center">
@@ -95,33 +130,10 @@ const setNews = (allNewsData, name) =>{
                           </div> 
                             <h6 > ${category.total_view ? category.total_view : 'No view found'}</h6>
                         <!-- Button trigger modal -->
-                        <a class="link-primary" href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Show details</a>
+                        <a class="link-primary" href="" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick = "modalInfo('${category._id}')">Show details</a>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                         <div class="modal-dialog">
-                           <div class="modal-content">
-                             <div class="modal-header">
-                               <h5 class="modal-title text-info text-center" id="exampleModalLabel">${category.title
-                               }</h5>
-                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                             </div>
-                             <div class="modal-body">
-                             <img src="${category.author.img}" class="img-fluid" alt="..." >
-                             <h6 >Name: ${category.author.name ? category.author.name : 'No name found'}</h6>
-                             <h6 class = "fs-6">Publish Date: ${category.author.published_date ? category.author. published_date : 'No release date found'}</h6>
-                             <h6 >View: ${category.total_view ? category.total_view : 'No view found'}</h6>
-                             <p class="card-text text-secondary text-sm">${category.details}</p>
-                             <img src="${category.image_url
-
-                             }" class="img-fluid" alt="..." >
-                             </div>
-                             <div class="modal-footer">
-                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                             </div>
-                           </div>
-                         </div>
-                     </div>
+                 
                   </div>
                 </div>
              </div>
